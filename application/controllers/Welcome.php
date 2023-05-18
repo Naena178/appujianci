@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
@@ -23,15 +24,37 @@ class Welcome extends CI_Controller
      */
     public function index()
     {
-        // INI KOMENTAR
         $blade = new Blade(VIEWPATH, APPPATH . 'cache');
         echo $blade->make('form', [])->render();
     }
 
     public function tampil()
+    
     {
-        $nama = 'tata';
+        $nama = $this->input->post('nama');
+        $nim = $this->input->post('nim');
+        $umur = $this->input->post('umur');
+
+        $status = '';
+
+        if ($umur < 10) {
+            $status = 'Anak';
+        } elseif ($umur < 20) {
+            $status = 'Remaja';
+        } elseif ($umur < 30) {
+            $status = 'Dewasa';
+        } else {
+            $status = 'Tua';
+        }
+
         $blade = new Blade(VIEWPATH, APPPATH . 'cache');
-        echo $blade->make('tampil', ['nama' => $nama])->render();
+        $array_data = [
+            'nama' => $nama,
+            'nim' => $nim,
+            'umur' => $umur,
+            'status' => $status,
+        ];
+
+        echo $blade->make('tampil', $array_data)->render();
     }
 }
